@@ -1,0 +1,21 @@
+<root>
+  <colour>
+    <dark tags="dark">
+      <primary weight="4">
+        <blue weight="3" tags="a b"/>
+        <red tags="b c"/>
+      </primary>
+      <secondary>
+        <green weight="2"/>
+      </secondary>
+    </dark>
+    <light>
+      <primary>
+        <red/>
+      </primary>
+      <secondary>
+        <purple/>
+      </secondary>
+    </light>
+  </colour>
+</root>
