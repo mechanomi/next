@@ -51,16 +51,17 @@ def carry_attrs(node):
         return
     parent_weight = float(node.get("weight", "1"))
     parent_tags = set(node.get("tags", "").split())
-    total_weight = 0
-    for child in children:
-        if not isinstance(child.tag, str):
-            continue
-        total_weight += float(child.get("weight", "1"))
+    total_weight = sum(
+        float(child.get("weight", "1"))
+        for child in children
+        if isinstance(child.tag, str)
+    )
+
     for child in children:
         if not isinstance(child.tag, str):
             continue
         weight = float(child.get("weight", "1"))
-        weight = weight / total_weight
+        weight /= total_weight
         weight = str(parent_weight * weight)
         tags = set(child.get("tags", "").split())
         tags = " ".join((parent_tags.union(tags)))
@@ -76,10 +77,7 @@ def get_tags(nodes):
     return sorted(distinct_tags)
 
 def match_tags(tags, inc_tags, ex_tags):
-    match = True
-    for inc_tag in inc_tags:
-        if inc_tag not in tags:
-            match = False
+    match = all(inc_tag in tags for inc_tag in inc_tags)
     for ex_tag in ex_tags:
         if ex_tag in tags:
             match = False
@@ -117,7 +115,7 @@ def repr_node(node):
 
 def stats(root):
     counts = {}
-    for i in range(0, DEBUG_RUNS):
+    for _ in range(DEBUG_RUNS):
         node = choose(root)
         if node is None:
             break
